@@ -1,12 +1,5 @@
 <template>
   <div id="app">
-    <div v-for="(item, idx) in myCollection" :key="item">
-      {{ item }}- {{ idx }}
-    </div>
-
-    <div class="logs" v-for="(log, id) in logs" :key="id">
-      {{ log }}
-    </div>
     <input type="number" v-model.number="operand1" placeholder="operand1" />
     <input
       type="number"
@@ -15,7 +8,7 @@
       @blur="sendData(operand2)"
     />
     <div>={{ result }}</div>
-    <div>= fib{{ fibResult }}</div>
+    <!-- <div>= fib{{ fibResult }}</div> -->
     <div class="error" :class="{ red: error }" v-if="!!error">
       {{ error }}
     </div>
@@ -29,13 +22,6 @@
     </div>
 
     <div class="keyboard">
-      <!-- 
-          <button @click="calculate('+')">+</button>
-          <button @click="calculate('-')">-</button>
-          <button @click="calculate('*')">*</button>
-          <button @click="calculate('/')">/</button>
-          <button @click="divInteger(operand1, operand2)">/floor</button> 
-        -->
       <button
         v-for="operand in operands"
         @click="calculate(operand)"
@@ -47,6 +33,29 @@
     </div>
     <!-- {{ powSum }}
       {{ powWithOperand }} -->
+    <div class="checkbox">
+      <label>Show keyboard</label
+      ><input type="checkbox" @click="checkKeyboardVisibility()" />
+    </div>
+    <div class="digitalKeyboard" v-if="showKeyboard">
+      <button
+        v-for="number in numbers"
+        @click="showNumber(number)"
+        :key="number"
+        v-bind:title="number"
+      >
+        {{ number }}
+      </button>
+      <button @click="backSpace()">&larr;</button>
+      <br />
+      <input
+        type="radio"
+        name="radio"
+        @click="chooseOperand(1)"
+        checked
+      />Операнд1
+      <input type="radio" name="radio" @click="chooseOperand(2)" />Операнд2
+    </div>
   </div>
 </template>
 
@@ -60,17 +69,14 @@ export default {
       text: "Some string",
       operand1: 0,
       operand2: 0,
-      fibResult: 0,
       result: 0,
       error: "",
       logs: {},
+      showKeyboard: false,
+      numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      choosenOperand: 1,
     };
   },
-  // watch: {
-  //   result: function (newValue, oldValue) {
-  //     this.console.log(newValue, oldValue);
-  //   },
-  // },
 
   methods: {
     calculate(operation = "+") {
@@ -94,21 +100,20 @@ export default {
       this.$set(this.logs, key, value);
     },
     add() {
-      this.result = this.operand1 + this.operand2;
-      this.fibResult = this.fib1 + this.fib2;
+      this.result = +this.operand1 + +this.operand2;
     },
     substract() {
-      this.result = this.operand1 - this.operand2;
+      this.result = +this.operand1 - +this.operand2;
     },
     mult() {
-      this.result = this.operand1 * this.operand2;
+      this.result = +this.operand1 * +this.operand2;
     },
     div() {
       const { operand1, operand2 } = this;
       if (operand2 === 0) {
         return (this.error = "Делить на 0 нельзя");
       }
-      this.result = operand1 / operand2;
+      this.result = +operand1 / +operand2;
     },
     divInteger(op1, op2) {
       this.result = parseInt(op1 / op2);
@@ -116,18 +121,38 @@ export default {
     sendData() {
       console.log("Send Data");
     },
-    fib(n) {
-      return n <= 1 ? n : this.fib(n - 1) + this.fib(n - 2);
+
+    checkKeyboardVisibility() {
+      this.showKeyboard = !this.showKeyboard;
+    },
+    showNumber(number) {
+      if (this.choosenOperand === 1) {
+        this.operand1 += number.toLocaleString();
+        this.operand1 = parseInt(this.operand1);
+      } else {
+        this.operand2 += number.toLocaleString();
+        this.operand2 = parseInt(this.operand2);
+      }
+      console.log(this.operand1, this.operand2);
+    },
+    backSpace() {
+      if (this.choosenOperand === 1) {
+        const value = this.operand1.toLocaleString().split("");
+        value.pop();
+        this.operand1 = value.join("").toLocaleString();
+      } else {
+        const value = this.operand2.toLocaleString().split("");
+        value.pop();
+        this.operand2 = value.join("").toLocaleString();
+      }
+    },
+    chooseOperand(operand) {
+      console.log(operand);
+      this.choosenOperand = operand;
     },
   },
-  computed: {
-    fib1() {
-      return this.fib(this.operand1);
-    },
-    fib2() {
-      return this.fib(this.operand2);
-    },
 
+  computed: {
     // powWithOperand() {
     //   return Math.pow(this.operand1, this.operand2);
     // },
