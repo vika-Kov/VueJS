@@ -41,22 +41,22 @@ export default {
       return[
         {
           date:"12.03.2020",
-          caregory:"Food",
+          category:"Food",
           value:180
         },
         {
           date:"11.04.2020",
-          caregory:"Internet",
+          category:"Internet",
           value:100
         },
         {
           date:"24.02.2020",
-          caregory:"Food",
+          category:"Food",
           value:300
         },
         {
           date:"02.07.2020",
-          caregory:"Sport",
+          category:"Sport",
           value:1400
         },
       ]
