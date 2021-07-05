@@ -1,11 +1,6 @@
 <template>
   <div class="payment-form">
-    <div class="add-new-cost">
-      <button class="add-new-cost_button" @click="checkFormVisibility()">
-        ADD NEW COST +
-      </button>
-    </div>
-    <div class="add-payment-form" v-if="showForm">
+    <div>
       <input
         class="add-payment-form_input"
         placeholder="Amount"
@@ -37,7 +32,7 @@ export default {
       value: 0,
       category: "",
       date: "",
-      showForm: false,
+    
     };
   },
   computed: {
@@ -52,18 +47,16 @@ export default {
   methods: {
     onClick() {
       console.log("saved");
-      const { value, category, date } = this;
+      const { date, category, value } = this;
       const data = {
-        value,
-        category,
         date: this.date || this.getCurrentDate,
+        category,
+        value,
       };
       console.log(date);
       this.$emit("addNewPayment", data);
     },
-    checkFormVisibility() {
-      this.showForm = !this.showForm;
-    },
+    
   },
 };
 </script>
