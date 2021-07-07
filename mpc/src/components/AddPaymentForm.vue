@@ -13,6 +13,11 @@
         type="text"
         v-model.trim="category"
       />
+      <select v-model="category">
+        <option v-for="(item, idx) in categoryList" :value="item" :key="idx">
+          {{item}}
+        </option>
+      </select>
       <input
         class="add-payment-form_input"
         placeholder="Date"
@@ -27,8 +32,10 @@
 <script>
 export default {
   name: "AddPaymentForm",
+  props:['categoryList'],
   data() {
     return {
+      selected:'Food',
       value: 0,
       category: "",
       date: "",
@@ -46,14 +53,13 @@ export default {
   },
   methods: {
     onClick() {
-      console.log("saved");
-      const { date, category, value } = this;
+      const { category, value } = this;
       const data = {
         date: this.date || this.getCurrentDate,
         category,
         value,
       };
-      console.log(date);
+      console.log(data);
       this.$emit("addNewPayment", data);
     },
     

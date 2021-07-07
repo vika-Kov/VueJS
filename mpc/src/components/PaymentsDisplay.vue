@@ -1,19 +1,22 @@
 <template>
-  <div class="list">
-    <table>
-      <tr class="item">
-        <th class="item_htg">#</th>
-        <th class="item_list">Date</th>
-        <th class="item_list">Category</th>
-        <th class="item_list">Value</th>
-      </tr>
-      <tr class="item" v-for="(item, idx) in items" :key="idx">
-        <th class="item_htg">{{ idx + 1 }}</th>
-        <th class="item_list">{{ item.date }}</th>
-        <th class="item_list">{{ item.category }}</th>
-        <th class="item_list">{{ item.value }}</th>
-      </tr>
-    </table>
+  <div class="payments-list">
+  
+      <div class="list">
+        <table>
+          <tr class="item">
+            <th class="item_htg">#</th>
+            <th class="item_list">Date</th>
+            <th class="item_list">Category</th>
+            <th class="item_list">Value</th>
+          </tr>
+          <tr class="item" v-for="(item, idx) in items" :key="idx">
+            <th class="item_htg">{{ idx + 1 }}</th>
+            <th class="item_list">{{ item.date }}</th>
+            <th class="item_list">{{ item.category }}</th>
+            <th class="item_list">{{ item.value }}</th>
+          </tr>
+        </table>
+      </div>
   </div>
 </template>
 
@@ -23,6 +26,7 @@ export default {
   props: {
     items: { type: Array, default: () => [], required: true },
   },
+  
 };
 </script>
 <style >
