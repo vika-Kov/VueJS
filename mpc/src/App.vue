@@ -19,7 +19,7 @@
       <br />
       <div>Total Sum = {{ getFPV }}</div>
       <h2>Payment List</h2>
-      <PaymentsDisplay :items="paymentsList" />
+      <PaymentsDisplay :items="paymentsList" :pages="pages" @switchPages="performSwitch"/>
       <br>
       <h2>Category List</h2>
       <CategoryDisplay :items="categoryList" />
@@ -43,6 +43,7 @@ export default {
   data() {
     return {
       showForm: false,
+      pages: this.$store.getters.getPages,
     };
   },
   methods: {
@@ -53,33 +54,12 @@ export default {
     addNewPaymentData(value) {
       this.addDataToPaymentList(value);
     },
-    fetchData() {
-      return [
-        {
-          date: "12.03.2020",
-          category: "Food",
-          value: 180,
-        },
-        {
-          date: "11.04.2020",
-          category: "Internet",
-          value: 100,
-        },
-        {
-          date: "24.02.2020",
-          category: "Food",
-          value: 300,
-        },
-        {
-          date: "02.07.2020",
-          category: "Sport",
-          value: 1400,
-        },
-      ];
-    },
     checkFormVisibility() {
       this.showForm = !this.showForm;
     },
+    performSwitch(page) {
+      this.fetchListData(page);
+    }
   },
   computed: {
     ...mapGetters(["getFullPaymentValue"]),

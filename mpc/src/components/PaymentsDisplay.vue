@@ -1,6 +1,5 @@
 <template>
   <div class="payments-list">
-  
       <div class="list">
         <table>
           <tr class="item">
@@ -16,8 +15,9 @@
             <th class="item_list">{{ item.value }}</th>
           </tr>
         </table>
-        <br>
+
       </div>
+    <button class="add-payment-form_button" @click="onClick(page)" v-for="page in pages" :key="page">Page {{ page }}</button>
   </div>
 </template>
 
@@ -26,7 +26,13 @@ export default {
   name: "PaymentsDisplay",
   props: {
     items: { type: Array, default: () => [], required: true },
+    pages: { type: Array, default: () => [], required: true },
   },
+  methods: {
+    onClick(page) {
+      this.$emit("switchPages", page)
+    }
+  }
   
 };
 </script>
@@ -42,5 +48,23 @@ export default {
 .item_list {
   width: 160px;
   padding-top: 20px;
+}
+.add-payment-form_button{
+  margin-bottom: 5px;
+  border: none;
+  height: 30px;
+  width: 100px;
+  background-color: #467bf8;
+  text-align: center;
+  color: white;
+  font-family: Verdana;
+  font-weight: 800;
+  font-size: 14px;
+  box-shadow: 0.2em 0.2em 10px rgba(122, 122, 122, 0.5);
+  border-radius: 6px;
+  transition: 0.3s;
+}
+button:hover {
+  transform: scale(1.05);
 }
 </style>
