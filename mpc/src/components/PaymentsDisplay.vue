@@ -16,6 +16,7 @@
             <th class="item_list">{{ item.value }}</th>
           </tr>
         </table>
+        <br>
       </div>
   </div>
 </template>

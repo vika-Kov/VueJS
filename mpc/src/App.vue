@@ -18,8 +18,11 @@
       </div>
       <br />
       <div>Total Sum = {{ getFPV }}</div>
+      <h2>Payment List</h2>
       <PaymentsDisplay :items="paymentsList" />
-      <PaymentsDisplay :items="categoryList" />
+      <br>
+      <h2>Category List</h2>
+      <CategoryDisplay :items="categoryList" />
     </div>
   </div>
 </template>
@@ -28,12 +31,14 @@
 import { mapMutations, mapActions, mapGetters } from "vuex";
 import AddPaymentForm from "./components/AddPaymentForm.vue";
 import PaymentsDisplay from "./components/PaymentsDisplay.vue";
+import CategoryDisplay from "./components/CategoryDisplay.vue"
 
 export default {
   name: "App",
   components: {
     PaymentsDisplay,
     AddPaymentForm,
+    CategoryDisplay,
   },
   data() {
     return {
@@ -41,12 +46,12 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setPaymentsListData", "addDataToPaymentsList"]),
+    ...mapMutations(["setPaymentsListData", "addDataToPaymentList"]),
     ...mapActions({
       fetchListData: "fetchData",
     }),
     addNewPaymentData(value) {
-      this.addDataToPaymentsList(value);
+      this.addDataToPaymentList(value);
     },
     fetchData() {
       return [
