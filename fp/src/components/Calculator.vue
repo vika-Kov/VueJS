@@ -1,12 +1,7 @@
 <template>
   <div id="app">
     <input type="number" v-model.number="operand1" placeholder="operand1" />
-    <input
-      type="number"
-      v-model.number="operand2"
-      placeholder="operand2"
-      @blur="sendData(operand2)"
-    />
+    <input type="number" v-model.number="operand2" placeholder="operand2" />
     <div>={{ result }}</div>
     <!-- <div>= fib{{ fibResult }}</div> -->
     <div class="error" :class="{ red: error }" v-if="!!error">
@@ -117,9 +112,6 @@ export default {
     },
     divInteger(op1, op2) {
       this.result = parseInt(op1 / op2);
-    },
-    sendData() {
-      console.log("Send Data");
     },
 
     checkKeyboardVisibility() {
