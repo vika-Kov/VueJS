@@ -13,9 +13,9 @@
         type="text"
         v-model.trim="category"
       />
-      <select v-model="category">
+      <select name="status" class="select-category" v-model="category">
         <option v-for="(item, idx) in categoryList" :value="item" :key="idx">
-          {{item}}
+          {{ item }}
         </option>
       </select>
       <input
@@ -32,14 +32,13 @@
 <script>
 export default {
   name: "AddPaymentForm",
-  props:['categoryList'],
+  props: ["categoryList"],
   data() {
     return {
-      selected:'Food',
+      selected: "Food",
       value: 0,
       category: "",
       date: "",
-    
     };
   },
   computed: {
@@ -62,7 +61,6 @@ export default {
       console.log(data);
       this.$emit("addNewPayment", data);
     },
-    
   },
 };
 </script>
@@ -89,8 +87,8 @@ export default {
   display: flex;
   margin-bottom: 10px;
 }
-.add-payment-form_button{
-    margin-bottom: 5px;
+.add-payment-form_button {
+  margin-bottom: 5px;
   border: none;
   height: 30px;
   width: 100px;
@@ -106,5 +104,10 @@ export default {
 }
 button:hover {
   transform: scale(1.05);
+}
+.select-category {
+  margin-bottom: 10px;
+  height: 30px;
+  width: 200px;
 }
 </style>

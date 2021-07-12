@@ -19,8 +19,12 @@
       <br />
       <div>Total Sum = {{ getFPV }}</div>
       <h2>Payment List</h2>
-      <PaymentsDisplay :items="paymentsList" :pages="pages" @switchPages="performSwitch"/>
-      <br>
+      <PaymentsDisplay
+        :items="paymentsList"
+        :pages="pages"
+        @switchPages="performSwitch"
+      />
+      <br />
       <h2>Category List</h2>
       <CategoryDisplay :items="categoryList" />
     </div>
@@ -31,7 +35,7 @@
 import { mapMutations, mapActions, mapGetters } from "vuex";
 import AddPaymentForm from "./components/AddPaymentForm.vue";
 import PaymentsDisplay from "./components/PaymentsDisplay.vue";
-import CategoryDisplay from "./components/CategoryDisplay.vue"
+import CategoryDisplay from "./components/CategoryDisplay.vue";
 
 export default {
   name: "App",
@@ -59,7 +63,7 @@ export default {
     },
     performSwitch(page) {
       this.fetchListData(page);
-    }
+    },
   },
   computed: {
     ...mapGetters(["getFullPaymentValue"]),

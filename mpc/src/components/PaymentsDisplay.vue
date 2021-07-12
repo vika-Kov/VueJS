@@ -1,23 +1,29 @@
 <template>
   <div class="payments-list">
-      <div class="list">
-        <table>
-          <tr class="item">
-            <th class="item_htg">#</th>
-            <th class="item_list">Date</th>
-            <th class="item_list">Category</th>
-            <th class="item_list">Value</th>
-          </tr>
-          <tr class="item" v-for="(item, idx) in items" :key="idx">
-            <th class="item_htg">{{ idx + 1 }}</th>
-            <th class="item_list">{{ item.date }}</th>
-            <th class="item_list">{{ item.category }}</th>
-            <th class="item_list">{{ item.value }}</th>
-          </tr>
-        </table>
-
-      </div>
-    <button class="add-payment-form_button" @click="onClick(page)" v-for="page in pages" :key="page">Page {{ page }}</button>
+    <div class="list">
+      <table>
+        <tr class="item">
+          <th class="item_htg">#</th>
+          <th class="item_list">Date</th>
+          <th class="item_list">Category</th>
+          <th class="item_list">Value</th>
+        </tr>
+        <tr class="item" v-for="(item, idx) in items" :key="idx">
+          <th class="item_htg">{{ idx + 1 }}</th>
+          <th class="item_list">{{ item.date }}</th>
+          <th class="item_list">{{ item.category }}</th>
+          <th class="item_list">{{ item.value }}</th>
+        </tr>
+      </table>
+    </div>
+    <button
+      class="add-payment-form_button"
+      @click="onClick(page)"
+      v-for="page in pages"
+      :key="page"
+    >
+      Page {{ page }}
+    </button>
   </div>
 </template>
 
@@ -30,10 +36,9 @@ export default {
   },
   methods: {
     onClick(page) {
-      this.$emit("switchPages", page)
-    }
-  }
-  
+      this.$emit("switchPages", page);
+    },
+  },
 };
 </script>
 <style >
@@ -49,12 +54,14 @@ export default {
   width: 160px;
   padding-top: 20px;
 }
-.add-payment-form_button{
+.add-payment-form_button {
   margin-bottom: 5px;
+  margin-top: 25px;
+  margin-left: 10px;
   border: none;
   height: 30px;
   width: 100px;
-  background-color: #467bf8;
+  background-color: #59bda5;
   text-align: center;
   color: white;
   font-family: Verdana;
