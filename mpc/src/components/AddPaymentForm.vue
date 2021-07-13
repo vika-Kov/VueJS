@@ -35,10 +35,9 @@ export default {
   props: ["categoryList"],
   data() {
     return {
-      selected: "Food",
       value: 0,
       category: "",
-      date: "",
+      date: null,
     };
   },
   computed: {
@@ -58,9 +57,20 @@ export default {
         category,
         value,
       };
-      console.log(data);
       this.$emit("addNewPayment", data);
     },
+    loadParams(route) {
+      this.category = route.params["category"];
+      this.value = route.query["value"];
+    },
+  },
+  watch: {
+    $route(newRoute) {
+      this.loadParams(newRoute);
+    },
+  },
+  created() {
+    this.loadParams(this.$route);
   },
 };
 </script>

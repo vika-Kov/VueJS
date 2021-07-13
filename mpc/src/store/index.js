@@ -22,7 +22,7 @@ export default new Vuex.Store({
         {
           id: 4,
           date: "23.03.2020",
-          category: "Entertaiment",
+          category: "Entertainment",
           value: 969,
         },
         {
@@ -71,7 +71,15 @@ export default new Vuex.Store({
     fetchCategoryList({ commit }) {
       return new Promise((resolve) => {
         setTimeout(() => {
-          resolve(["Food", "Transport", "Education", "Internet", "GB", "Life"]);
+          resolve([
+            "Food",
+            "Transport",
+            "Education",
+            "Internet",
+            "GB",
+            "Life",
+            "Entertainment",
+          ]);
         }, 1000);
       }).then((res) => commit("addCategory", res));
     },
@@ -82,7 +90,7 @@ export default new Vuex.Store({
           resolve(items);
         }, 1000);
       }).then((res) => {
-        // console.log(res);
+        console.log(res);
         commit("setPaymentsListData", res);
       });
     },
