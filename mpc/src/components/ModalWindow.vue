@@ -34,11 +34,12 @@ export default {
   },
   methods: {
     ...mapMutations(["setPaymentsListData", "addDataToPaymentList"]),
-    onCloseClick() {
-      this.$emit("close");
-    },
+
     addNewPaymentData(value) {
       this.addDataToPaymentList(value);
+    },
+    onCloseClick() {
+      this.$modal.hide();
     },
   },
   computed: {

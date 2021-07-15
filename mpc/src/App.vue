@@ -23,17 +23,12 @@
         <br />
         <router-link to="/404">Error 404</router-link>
       </div>
-      <div class="add-new-cost">
-        <button class="add-new-cost_button" @click="checkFormVisibility()">
-          ADD NEW COST +
-        </button>
-      </div>
-      <div class="add-payment-form" v-if="showForm">
+      <div class="add-payment-form">
         <!-- <AddPaymentForm
           @addNewPayment="addNewPaymentData"
           :category-list="categoryList"
         /> -->
-        <ModalWindow @close="showForm = !showForm" :settings="settings" />
+        <ModalWindow v-if="modalWindowName" :settings="settings" />
       </div>
     </div>
     <br />
@@ -52,27 +47,31 @@ export default {
   data() {
     return {
       showForm: false,
-      settings: {
-        header: "Add My Cost",
-        compName: "add",
-      },
+      settings: {},
+      modalWindowName: "",
     };
   },
   methods: {
-    checkFormVisibility() {
-      this.showForm = !this.showForm;
-    },
-    // goToPage(page) {
-    //   this.$router.push({
-    //     name: page,
-    //   });
+    // checkFormVisibility(@click="checkFormVisibility()") {
+    //   this.modalWindowName = !this.modalWindowName;
     // },
+    onShown(settings) {
+      this.modalWindowName = settings.name;
+      this.settings = settings.settings;
+    },
+    onHide() {
+      this.modalWindowName = "";
+      this.settings = {};
+    },
+  },
+  mounted() {
+    this.$modal.EventBus.$on("show", this.onShown);
+    this.$modal.EventBus.$on("hide", this.onHide);
   },
   created() {
     if (this.$route.path != "/dashboard") {
       this.$router.push({ name: "dashboard" });
     }
-    // this.setPaymentsListData(this.fetchData());
   },
 };
 </script>

@@ -2,6 +2,11 @@
   <div>
     <div class="wrapper">
       <br />
+      <div class="add-new-cost">
+        <button class="add-new-cost_button" @click="showPaymentsForm">
+          ADD NEW COST +
+        </button>
+      </div>
       <div>Total Sum = {{ getFPV }}</div>
       <h2>Payment List</h2>
       <PaymentsDisplay
@@ -46,6 +51,10 @@ export default {
     performSwitch(page) {
       this.fetchListData(page);
     },
+    showPaymentsForm() {
+      this.$modal.show("add", { header: "Add My Cost", compName: "add" });
+      this.$modal.hide();
+    },
   },
   computed: {
     ...mapGetters(["getFullPaymentValue"]),
@@ -59,10 +68,7 @@ export default {
       return this.$store.getters.getCategoryList;
     },
   },
-  mounted() {
-    this.$modal.show("name", "settings");
-    this.$modal.hide();
-  },
+  mounted() {},
   created() {
     if (!this.fetchListData.length) {
       this.fetchListData();
