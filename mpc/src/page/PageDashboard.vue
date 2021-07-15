@@ -1,17 +1,6 @@
 <template>
   <div>
-    <div class="add-new-cost">
-      <button class="add-new-cost_button" @click="checkFormVisibility()">
-        ADD NEW COST +
-      </button>
-    </div>
     <div class="wrapper">
-      <div class="add-payment-form" v-if="showForm">
-        <AddPaymentForm
-          @addNewPayment="addNewPaymentData"
-          :category-list="categoryList"
-        />
-      </div>
       <br />
       <div>Total Sum = {{ getFPV }}</div>
       <h2>Payment List</h2>
@@ -28,7 +17,7 @@
 </template>
 <script>
 import { mapMutations, mapActions, mapGetters } from "vuex";
-import AddPaymentForm from "../components/AddPaymentForm.vue";
+// import AddPaymentForm from "../components/AddPaymentForm.vue";
 import PaymentsDisplay from "../components/PaymentsDisplay.vue";
 import CategoryDisplay from "../components/CategoryDisplay.vue";
 
@@ -36,12 +25,11 @@ export default {
   name: "PageDashboard",
   components: {
     PaymentsDisplay,
-    AddPaymentForm,
+    // AddPaymentForm,
     CategoryDisplay,
   },
   data() {
     return {
-      showForm: false,
       pages: this.$store.getters.getPages,
       pageName: String,
     };
@@ -51,12 +39,10 @@ export default {
     ...mapActions({
       fetchListData: "fetchData",
     }),
-    addNewPaymentData(value) {
-      this.addDataToPaymentList(value);
-    },
-    checkFormVisibility() {
-      this.showForm = !this.showForm;
-    },
+    // addNewPaymentData(value) {
+    //   this.addDataToPaymentList(value);
+    // },
+
     performSwitch(page) {
       this.fetchListData(page);
     },
@@ -73,7 +59,10 @@ export default {
       return this.$store.getters.getCategoryList;
     },
   },
-  mounted() {},
+  mounted() {
+    this.$modal.show("name", "settings");
+    this.$modal.hide();
+  },
   created() {
     if (!this.fetchListData.length) {
       this.fetchListData();
@@ -84,21 +73,6 @@ export default {
 </script>
 
 <style >
-.add-new-cost_button {
-  margin-bottom: 5px;
-  border: none;
-  height: 45px;
-  width: 200px;
-  background-color: #59bda5;
-  text-align: center;
-  color: white;
-  font-family: Verdana;
-  font-weight: 800;
-  font-size: 14px;
-  box-shadow: 0.2em 0.2em 10px rgba(122, 122, 122, 0.5);
-  border-radius: 6px;
-  transition: 0.3s;
-}
 button:hover {
   transform: scale(1.05);
 }

@@ -72,6 +72,7 @@ export default {
   created() {
     this.loadParams(this.$route);
   },
+  //передача параметров через this.$route
 };
 </script>
 

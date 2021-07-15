@@ -15,6 +15,9 @@ export default {
       navPage: "PAGE_NAME_TO_BE_ADDED",
     };
   },
+  created() {
+    this.navPage = this.$route.path;
+  },
 };
 </script>
 
