@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import { mapMutations, mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 // import AddPaymentForm from "../components/AddPaymentForm.vue";
 import PaymentsDisplay from "../components/PaymentsDisplay.vue";
 import CategoryDisplay from "../components/CategoryDisplay.vue";
@@ -37,6 +37,7 @@ export default {
     return {
       pages: this.$store.getters.getPages,
       pageName: String,
+      modalVisible: false,
     };
   },
   methods: {
@@ -53,7 +54,6 @@ export default {
     },
     showPaymentsForm() {
       this.$modal.show("add", { header: "Add My Cost", compName: "add" });
-      this.$modal.hide();
     },
   },
   computed: {
@@ -78,7 +78,7 @@ export default {
 };
 </script>
 
-<style >
+<style>
 button:hover {
   transform: scale(1.05);
 }
