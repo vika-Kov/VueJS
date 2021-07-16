@@ -14,6 +14,7 @@
         :pages="pages"
         @switchPages="performSwitch"
         @deletePayment="deletePayment"
+        @editPayment="editPayment"
       />
       <br />
       <h2>Category List</h2>
@@ -44,15 +45,20 @@ export default {
     ...mapActions({
       fetchListData: "fetchData",
     }),
-    deletePayment(paymentId) {
-      this.$store.commit("deleteDataFromPaymentList", paymentId);
-    },
-
     performSwitch(page) {
       this.fetchListData(page);
     },
     showPaymentsForm() {
       this.$modal.show("add", { header: "Add My Cost", compName: "add" });
+    },
+    // Context Menu emitted events
+    deletePayment(paymentId) {
+      this.$store.commit("deleteDataFromPaymentList", paymentId);
+    },
+    editPayment(paymentId) {
+      console.log("Edit Payment ", paymentId);
+      this.$contextMenu.edit(paymentId);
+      // this.$store.commit("deleteDataFromPaymentList", paymentId);
     },
   },
   computed: {

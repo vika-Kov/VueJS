@@ -14,6 +14,10 @@ export default {
         this.EventBus.$emit("hide");
         console.log("hide contextMenu");
       },
+      edit(paymentID) {
+        this.EventBus.$emit("edit", paymentID);
+        console.log("edit payment data");
+      },
     };
   },
 };

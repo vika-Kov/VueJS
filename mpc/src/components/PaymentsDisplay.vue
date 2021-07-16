@@ -24,7 +24,7 @@
     <context-menu :v-if="showContextMenu" :settings="settings">
       <menu>
         <li>
-          <button>Редактировать</button>
+          <button @click="editPayment">Редактировать</button>
         </li>
         <li>
           <button @click="deletePayment">Удалить</button>
@@ -78,6 +78,9 @@ export default {
       this.$emit("deletePayment", this.selectedPaymentId);
       this.$contextMenu.hide();
     },
+    editPayment() {
+      this.$emit("editPayment", this.selectedPaymentId);
+    },
   },
   mounted() {
     this.$contextMenu.EventBus.$on("show", this.onShown);
@@ -86,6 +89,9 @@ export default {
 };
 </script>
 <style>
+li {
+  list-style-type: none; /* Убираем маркеры */
+}
 .list {
   max-width: 560px;
   box-shadow: 5px 6px 10px 2px rgba(0, 0, 0, 0.19);

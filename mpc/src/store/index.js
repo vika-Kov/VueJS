@@ -47,16 +47,23 @@ export default new Vuex.Store({
       state.categoryList = payload;
     },
     deleteDataFromPaymentList(state, payload) {
-      console.log(
-        "deleteDataFromPaymentList has been called with payload ",
-        payload
-      );
-      console.log(state.paymentsList);
       state.paymentsList = state.paymentsList.filter(
         (payment) => payment.id !== payload
       );
-      // state.paymentsList.pop();
-      console.log(state.paymentsList);
+    },
+    editPayment(state, payload) {
+      console.log("Payload = ", payload);
+      this.state.paymentsList.forEach((payment) => {
+        if (payment.id === payload.id) {
+          payment.value = payload.value;
+          payment.category = payload.category;
+          payment.date = payload.date;
+        }
+      });
+      // state.paymentsList = state.paymentsList.map((item) => {
+      //   item.value += item.value;
+      // });
+      // state.paymentsList.push(payload);
     },
   },
   getters: {
@@ -91,6 +98,7 @@ export default new Vuex.Store({
             "GB",
             "Life",
             "Entertainment",
+            "Navigation",
           ]);
         }, 1000);
       }).then((res) => commit("addCategory", res));
