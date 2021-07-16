@@ -41,7 +41,7 @@ export default {
       return this.$store.getters.getPaymentList;
     },
     categoryList() {
-      console.log("this.$store.getters.getCategoryList;");
+      // console.log("this.$store.getters.getCategoryList;");
       return this.$store.getters.getCategoryList;
     },
   },

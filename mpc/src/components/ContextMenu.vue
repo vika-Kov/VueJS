@@ -1,7 +1,10 @@
 <template>
-  <div class="context-menu" :style="style" ref="context">
-    <slot></slot>
-  </div>
+  <transition name="fade">
+    <div class="context-menu" v-show="show" :style="style" ref="context">
+      <button @click="onCloseClick">X</button>
+      <slot></slot>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -11,6 +14,7 @@ export default {
     return {
       left: 0, // left position
       top: 0, // top position
+      show: false,
     };
   },
   props: {
@@ -21,25 +25,20 @@ export default {
   methods: {
     onCloseClick() {
       this.$contextMenu.hide();
-      this.left = 100;
-      this.top = 100;
+      this.show = false;
+      this.left = 0;
+      this.top = 0;
     },
-
-    // onOpenClick(evt) {
-    //   // updates position of context menu
-    //   this.left = evt.pageX || evt.clientX;
-    //   this.top = evt.pageY || evt.clientY;
-    //   // make element focused
-    //   // @ts-ignore
-    //   // Vue.nextTick(() => this.$el.focus());
-    //   // this.show = true;
-    // },
-
-    style() {
-      const evt = this.settings.evt;
+    onShown(settings) {
+      const evt = settings.settings.evt;
       this.left = evt.pageX || evt.clientX;
-      this.top = evt.pageY || evt.clientY;
-      console.log(this.left, this.top);
+      this.top = (evt.pageY || evt.clientY) - window.pageYOffset;
+      this.show = true;
+    },
+  },
+  computed: {
+    // get position of context menu
+    style() {
       return {
         top: this.top + "px",
         left: this.left + "px",
@@ -47,10 +46,8 @@ export default {
     },
   },
   mounted() {
-    // const evt = this.settings.evt;
-    // this.left = evt.pageX || evt.clientX;
-    // this.top = evt.pageY || evt.clientY;
-    // console.log(this.left, this.top);
+    this.$contextMenu.EventBus.$on("show", this.onShown);
+    // this.$contextMenu.EventBus.$on("hide", this.onHide);
   },
 };
 </script>
@@ -59,12 +56,21 @@ export default {
 li {
   list-style-type: none; /* Убираем маркеры */
 }
-/*.context-menu {*/
-/*  position: fixed;*/
-/*  background: white;*/
-/*  z-index: 999;*/
-/*  outline: none;*/
-/*  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);*/
-/*  cursor: pointer;*/
-/*}*/
+.context-menu {
+  position: fixed;
+  background: white;
+  z-index: 999;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  cursor: pointer;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

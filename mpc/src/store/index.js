@@ -90,7 +90,7 @@ export default new Vuex.Store({
           resolve(items);
         }, 1000);
       }).then((res) => {
-        console.log(res);
+        // console.log(res);
         commit("setPaymentsListData", res);
       });
     },

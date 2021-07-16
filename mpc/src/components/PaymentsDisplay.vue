@@ -15,24 +15,22 @@
           <th class="item_list">{{ item.category }}</th>
           <th class="item_list">{{ item.value }}</th>
           <th class="item_list">
-            <button @click="showContextMenu" :id="idx">...</button>
+            <button @click="openContextMenu" :id="idx">...</button>
           </th>
         </tr>
       </table>
     </div>
-    <transition name="fade">
-      <context-menu v-if="contextMenuName" :settings="settings">
-        <menu>
-          <li>
-            <button>Редактировать</button>
-          </li>
-          <li>
-            <button>Удалить</button>
-          </li>
-          <li>Position</li>
-        </menu>
-      </context-menu>
-    </transition>
+
+    <context-menu :v-if="showContextMenu" :settings="settings">
+      <menu>
+        <li>
+          <button>Редактировать</button>
+        </li>
+        <li>
+          <button>Удалить</button>
+        </li>
+      </menu>
+    </context-menu>
     <button
       class="add-payment-form_button"
       @click="onClick(page)"
@@ -50,9 +48,10 @@ export default {
   components: { ContextMenu: () => import("@/components/ContextMenu") },
   data() {
     return {
+      showContextMenu: false,
       settings: {},
-      contextMenuName: "",
-      contextMenuVisible: false,
+      // contextMenuName: "",
+      // contextMenuVisible: false,
     };
   },
   props: {
@@ -60,25 +59,32 @@ export default {
     pages: { type: Array, default: () => [], required: true },
   },
   methods: {
-    showContextMenu(event) {
-      console.log(event.target.clientX);
-
-      if (!this.contextMenuName) {
-        this.$contextMenu.show("contextMenu", {
-          idx: event.target.id,
-          evt: event,
-        });
-        return;
-      }
-      this.contextMenuName = "";
+    openContextMenu(event) {
+      this.$contextMenu.show("contextMenu", {
+        idx: event.target.id,
+        evt: event,
+      });
     },
+    // showContextMenu(event) {
+    //   console.log(event.target.clientX);
+    //
+    //   if (!this.contextMenuName) {
+    //     this.$contextMenu.show("contextMenu", {
+    //       idx: event.target.id,
+    //       evt: event,
+    //     });
+    //     return;
+    //   }
+    //   this.contextMenuName = "";
+    // },
 
     onShown(settings) {
-      this.contextMenuName = settings.name;
+      // console.log("onShown");
+      // this.contextMenuName = settings.name;
       this.settings = settings.settings;
     },
     onHide() {
-      this.contextMenuName = "";
+      // this.contextMenuName = "";
       this.settings = {};
     },
     onClick(page) {
