@@ -4,15 +4,15 @@ export default {
       return;
     }
     this.installed = true;
-    Vue.prototype.$modal = {
+    Vue.prototype.$contextMenu = {
       EventBus: new Vue(),
       show(name, settings) {
         this.EventBus.$emit("show", { name, settings });
-        console.log("show");
+        console.log("show contextMenu");
       },
       hide() {
         this.EventBus.$emit("hide");
-        console.log("hide");
+        console.log("hide contextMenu");
       },
     };
   },

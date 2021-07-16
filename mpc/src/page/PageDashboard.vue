@@ -22,7 +22,6 @@
 </template>
 <script>
 import { mapActions, mapGetters, mapMutations } from "vuex";
-// import AddPaymentForm from "../components/AddPaymentForm.vue";
 import PaymentsDisplay from "../components/PaymentsDisplay.vue";
 import CategoryDisplay from "../components/CategoryDisplay.vue";
 

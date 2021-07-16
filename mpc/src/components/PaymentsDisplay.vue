@@ -7,15 +7,32 @@
           <th class="item_list">Date</th>
           <th class="item_list">Category</th>
           <th class="item_list">Value</th>
+          <th></th>
         </tr>
         <tr class="item" v-for="(item, idx) in items" :key="idx">
           <th class="item_htg">{{ idx + 1 }}</th>
           <th class="item_list">{{ item.date }}</th>
           <th class="item_list">{{ item.category }}</th>
           <th class="item_list">{{ item.value }}</th>
+          <th class="item_list">
+            <button @click="showContextMenu" :id="idx">...</button>
+          </th>
         </tr>
       </table>
     </div>
+    <transition name="fade">
+      <context-menu v-if="contextMenuName" :settings="settings">
+        <menu>
+          <li>
+            <button>Редактировать</button>
+          </li>
+          <li>
+            <button>Удалить</button>
+          </li>
+          <li>Position</li>
+        </menu>
+      </context-menu>
+    </transition>
     <button
       class="add-payment-form_button"
       @click="onClick(page)"
@@ -30,18 +47,51 @@
 <script>
 export default {
   name: "PaymentsDisplay",
+  components: { ContextMenu: () => import("@/components/ContextMenu") },
+  data() {
+    return {
+      settings: {},
+      contextMenuName: "",
+      contextMenuVisible: false,
+    };
+  },
   props: {
     items: { type: Array, default: () => [], required: true },
     pages: { type: Array, default: () => [], required: true },
   },
   methods: {
+    showContextMenu(event) {
+      console.log(event.target.clientX);
+
+      if (!this.contextMenuName) {
+        this.$contextMenu.show("contextMenu", {
+          idx: event.target.id,
+          evt: event,
+        });
+        return;
+      }
+      this.contextMenuName = "";
+    },
+
+    onShown(settings) {
+      this.contextMenuName = settings.name;
+      this.settings = settings.settings;
+    },
+    onHide() {
+      this.contextMenuName = "";
+      this.settings = {};
+    },
     onClick(page) {
       this.$emit("switchPages", page);
     },
   },
+  mounted() {
+    this.$contextMenu.EventBus.$on("show", this.onShown);
+    this.$contextMenu.EventBus.$on("hide", this.onHide);
+  },
 };
 </script>
-<style >
+<style>
 .list {
   max-width: 560px;
   box-shadow: 5px 6px 10px 2px rgba(0, 0, 0, 0.19);

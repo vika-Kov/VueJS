@@ -28,7 +28,9 @@
           @addNewPayment="addNewPaymentData"
           :category-list="categoryList"
         /> -->
-        <ModalWindow v-if="modalWindowName" :settings="settings" />
+        <transition name="fade">
+          <ModalWindow v-if="modalWindowName" :settings="settings" />
+        </transition>
       </div>
     </div>
     <br />
@@ -40,10 +42,9 @@
 </template>
 
 <script>
-import ModalWindow from "./components/ModalWindow.vue";
 export default {
   name: "App",
-  components: { ModalWindow },
+  components: { ModalWindow: () => import("@/components/ModalWindow") },
   data() {
     return {
       showForm: false,
@@ -52,9 +53,6 @@ export default {
     };
   },
   methods: {
-    // checkFormVisibility(@click="checkFormVisibility()") {
-    //   this.modalWindowName = !this.modalWindowName;
-    // },
     onShown(settings) {
       this.modalWindowName = settings.name;
       this.settings = settings.settings;
@@ -97,5 +95,14 @@ export default {
 }
 button:hover {
   transform: scale(1.05);
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
