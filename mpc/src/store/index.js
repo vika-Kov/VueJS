@@ -46,6 +46,18 @@ export default new Vuex.Store({
     addCategory(state, payload) {
       state.categoryList = payload;
     },
+    deleteDataFromPaymentList(state, payload) {
+      console.log(
+        "deleteDataFromPaymentList has been called with payload ",
+        payload
+      );
+      console.log(state.paymentsList);
+      state.paymentsList = state.paymentsList.filter(
+        (payment) => payment.id !== payload
+      );
+      // state.paymentsList.pop();
+      console.log(state.paymentsList);
+    },
   },
   getters: {
     getPaymentList: (state) => state.paymentsList,

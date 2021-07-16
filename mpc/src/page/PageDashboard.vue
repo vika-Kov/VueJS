@@ -13,6 +13,7 @@
         :items="paymentsList"
         :pages="pages"
         @switchPages="performSwitch"
+        @deletePayment="deletePayment"
       />
       <br />
       <h2>Category List</h2>
@@ -29,7 +30,6 @@ export default {
   name: "PageDashboard",
   components: {
     PaymentsDisplay,
-    // AddPaymentForm,
     CategoryDisplay,
   },
   data() {
@@ -44,9 +44,9 @@ export default {
     ...mapActions({
       fetchListData: "fetchData",
     }),
-    // addNewPaymentData(value) {
-    //   this.addDataToPaymentList(value);
-    // },
+    deletePayment(paymentId) {
+      this.$store.commit("deleteDataFromPaymentList", paymentId);
+    },
 
     performSwitch(page) {
       this.fetchListData(page);

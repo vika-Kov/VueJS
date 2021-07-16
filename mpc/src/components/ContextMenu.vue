@@ -23,17 +23,23 @@ export default {
     },
   },
   methods: {
-    onCloseClick() {
-      this.$contextMenu.hide();
+    closeContextMenu() {
       this.show = false;
       this.left = 0;
       this.top = 0;
+    },
+    onCloseClick() {
+      // this.$contextMenu.hide();
+      this.closeContextMenu();
     },
     onShown(settings) {
       const evt = settings.settings.evt;
       this.left = evt.pageX || evt.clientX;
       this.top = (evt.pageY || evt.clientY) - window.pageYOffset;
       this.show = true;
+    },
+    onHide() {
+      this.closeContextMenu();
     },
   },
   computed: {
@@ -47,7 +53,7 @@ export default {
   },
   mounted() {
     this.$contextMenu.EventBus.$on("show", this.onShown);
-    // this.$contextMenu.EventBus.$on("hide", this.onHide);
+    this.$contextMenu.EventBus.$on("hide", this.onHide);
   },
 };
 </script>

@@ -27,7 +27,7 @@
           <button>Редактировать</button>
         </li>
         <li>
-          <button>Удалить</button>
+          <button @click="deletePayment">Удалить</button>
         </li>
       </menu>
     </context-menu>
@@ -50,8 +50,7 @@ export default {
     return {
       showContextMenu: false,
       settings: {},
-      // contextMenuName: "",
-      // contextMenuVisible: false,
+      selectedPaymentId: null,
     };
   },
   props: {
@@ -64,31 +63,20 @@ export default {
         idx: event.target.id,
         evt: event,
       });
+      this.selectedPaymentId = this.items[event.target.id].id;
     },
-    // showContextMenu(event) {
-    //   console.log(event.target.clientX);
-    //
-    //   if (!this.contextMenuName) {
-    //     this.$contextMenu.show("contextMenu", {
-    //       idx: event.target.id,
-    //       evt: event,
-    //     });
-    //     return;
-    //   }
-    //   this.contextMenuName = "";
-    // },
-
     onShown(settings) {
-      // console.log("onShown");
-      // this.contextMenuName = settings.name;
       this.settings = settings.settings;
     },
     onHide() {
-      // this.contextMenuName = "";
       this.settings = {};
     },
     onClick(page) {
       this.$emit("switchPages", page);
+    },
+    deletePayment() {
+      this.$emit("deletePayment", this.selectedPaymentId);
+      this.$contextMenu.hide();
     },
   },
   mounted() {
