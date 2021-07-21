@@ -98,7 +98,7 @@ describe("Calculator test methods", () => {
 
     expect(wrapper.vm.result).toBe(200);
   });
-
+  //test div
   it("Test div operation", async () => {
     const wrapper = mount(Calculator);
 
@@ -144,6 +144,21 @@ describe("Calculator test methods", () => {
 
     expect(wrapper.vm.result).toBe(12);
   });
+  //test plus
+  it("Test mult operation", async () => {
+    const wrapper = mount(Calculator);
+
+    const operand1Input = wrapper.find("input[placeholder=operand1]");
+    operand1Input.setValue("4");
+
+    const operand2Input = wrapper.find("input[placeholder=operand2]");
+    operand2Input.setValue("4");
+
+    const sumOperationBtn = wrapper.find('button[title="+"]');
+    sumOperationBtn.trigger("click");
+
+    expect(wrapper.vm.result).toBe(8);
+  });
 });
 
 describe("Calculator screen keyboard buttons ", () => {
@@ -157,5 +172,23 @@ describe("Calculator screen keyboard buttons ", () => {
     expect(wrapper.vm.operand1).toBe(1);
   });
 
-  //другие кнопки СДЕЛАТЬ
+  it("Test button btn1", async () => {
+    const wrapper = mount(Calculator);
+
+    const keyboardBtn = wrapper.find('button[title="btn2"]');
+    console.log(keyboardBtn);
+    keyboardBtn.trigger("click");
+
+    expect(wrapper.vm.operand1).toBe(2);
+  });
+  it("Test button btn1", async () => {
+    const wrapper = mount(Calculator);
+
+    const keyboardBtn = wrapper.find('button[title="btn3"]');
+    console.log(keyboardBtn);
+    keyboardBtn.trigger("click");
+
+    expect(wrapper.vm.operand1).toBe(3);
+  });
+  //остальные делаются по подобию и нет смысла их все описывать
 });
