@@ -37,11 +37,11 @@
         v-for="number in numbers"
         @click="showNumber(number)"
         :key="number"
-        v-bind:title="number"
+        v-bind:title="'btn' + number"
       >
         {{ number }}
       </button>
-      <button @click="backSpace()">&larr;</button>
+      <button @click="backSpace()" id="backSpace">&larr;</button>
       <br />
       <input
         type="radio"
@@ -67,7 +67,7 @@ export default {
       result: 0,
       error: "",
       logs: {},
-      showKeyboard: false,
+      showKeyboard: true,
       numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9],
       choosenOperand: 1,
     };
