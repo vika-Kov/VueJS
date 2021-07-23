@@ -6,65 +6,23 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     paymentsList: [],
-    categoryList: [],
-    data: {
-      page1: [
-        { id: 1, date: "20.03.2020", category: "Food", value: 169 },
-        {
-          id: 2,
-          date: "21.03.2020",
-          category: "Navigation",
-          value: 50,
-        },
-        { id: 3, date: "22.03.2020", category: "Sport", value: 450 },
-      ],
-      page2: [
-        {
-          id: 4,
-          date: "23.03.2020",
-          category: "Entertainment",
-          value: 969,
-        },
-        {
-          id: 5,
-          date: "24.03.2020",
-          category: "Education",
-          value: 1500,
-        },
-        { id: 6, date: "25.03.2020", category: "Food", value: 200 },
-      ],
-    },
+    postIds: [],
+    posts: {},
+    category: [],
   },
   mutations: {
     setPaymentsListData(state, payload) {
-      const jointPaymentList = [...state.paymentsList, ...payload];
-      state.paymentsList = [...new Set(jointPaymentList)];
+      state.paymentsList = payload;
     },
     addDataToPaymentList(state, payload) {
       state.paymentsList.push(payload);
     },
     addCategory(state, payload) {
-      state.categoryList = payload;
+      state.category = payload;
     },
-    deleteDataFromPaymentList(state, payload) {
-      state.paymentsList = state.paymentsList.filter(
-        (payment) => payment.id !== payload
-      );
-    },
-    editPayment(state, payload) {
-      console.log("Payload = ", payload);
-      this.state.paymentsList.forEach((payment) => {
-        if (payment.id === payload.id) {
-          payment.value = payload.value;
-          payment.category = payload.category;
-          payment.date = payload.date;
-        }
-      });
-      // state.paymentsList = state.paymentsList.map((item) => {
-      //   item.value += item.value;
-      // });
-      // state.paymentsList.push(payload);
-    },
+    // editPaymentList(state, payload){
+    //     Vue.set(state.paymentsList, 0, payload)
+    // }
   },
   getters: {
     getPaymentList: (state) => state.paymentsList,
@@ -72,19 +30,17 @@ export default new Vuex.Store({
       return state.paymentsList.reduce((res, cur) => res + cur.value, 0);
     },
     getCategoryFull: (state) => {
-      return state.categoryList;
+      return state.paymentsList.map((i) => i.category);
     },
     getCategoryList: (state) => {
-      return state.categoryList;
-    },
-    getPages: (state) => {
-      const pagesCount = Object.keys(state.data).length;
-      const pages = [...Array(pagesCount).keys()].map((x) => x + 1);
-      return pages;
+      return state.category;
     },
   },
+  // commit - вызов мутации
+  // dispatch - вызов actions
+  //
   actions: {
-    SomeAction({ commit }, res) {
+    someAction({ commit }, res) {
       commit("setPaymentsListData", res);
     },
     fetchCategoryList({ commit }) {
@@ -97,22 +53,26 @@ export default new Vuex.Store({
             "Internet",
             "GB",
             "Life",
-            "Entertainment",
-            "Navigation",
+            "Sport",
           ]);
         }, 1000);
       }).then((res) => commit("addCategory", res));
     },
-    fetchData({ commit }, page = 1) {
+    fetchData({ dispatch }) {
       return new Promise((resolve) => {
         setTimeout(() => {
-          const items = this.state.data["page" + page];
+          const items = [];
+          for (let i = 1; i < 110; i++) {
+            items.push({
+              date: "01.07.2021",
+              category: "Food",
+              value: i,
+              id: i,
+            });
+          }
           resolve(items);
-        }, 1000);
-      }).then((res) => {
-        // console.log(res);
-        commit("setPaymentsListData", res);
-      });
+        }, 2000);
+      }).then((res) => dispatch("someAction", res));
     },
   },
 });

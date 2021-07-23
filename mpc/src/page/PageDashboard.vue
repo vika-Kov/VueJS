@@ -1,89 +1,96 @@
 <template>
-<v-container>
   <v-row>
-    <v-col cols="6">
+    <v-col cols="9">
       <div class="text-h5 text-md-3 pb-4">My personal costs</div>
-      <v-dialog v-model="dialog" width="500">
-        <template v-slot:activator= "{on}">
-          <v-btn color="teal lighten-1" v-on="on" dark @click="showPaymentsForm">ADD NEW COST<v-icon>mdi-plus</v-icon></v-btn>
-        </template>
-          <v-card>
-          <AddPaymentForm
-          @addNewPayment="addNewPaymentData"
-          :category-list="categoryList"/>
-          <v-card-action>
-             <v-btn
-            color="primary"
-            text
-            @click="dialog = false"
+
+      <v-dialog v-model="dialog">
+        <template v-slot:activator="{ on }">
+          <v-btn color="teal" v-on="on" dark
+            >ADD NEW COST <v-icon>mdi-plus</v-icon></v-btn
           >
-            Close
-          </v-btn>
-          </v-card-action>
-          </v-card>
+        </template>
+        <v-card>
+          <AddPaymentForm
+            @addNewPayment="addNewPaymentData"
+            :category-list="categoryList"
+          />
+        </v-card>
+        <v-card-action>
+          <v-spacer></v-spacer>
+
+          <v-btn color="white" text @click="dialog = false">Close</v-btn>
+
+          <v-btn color="white" text>Add</v-btn>
+        </v-card-action>
       </v-dialog>
-        <PaymentsDisplay
-          :items="paymentsList"
-          :pages="pages"
-          @switchPages="performSwitch"
-          @deletePayment="deletePayment"
-          @editPayment="editPayment"
-        />
-        <div class="text-h5 text-md-3 py-4">Total Sum = {{ getFPV }}</div>
-        <div class="text-h5"> Category List</div>
-        <CategoryDisplay :items="categoryList" />
+      <PaymentsDisplay :items="curElements" />
+      <Pagination
+        :length="paymentListLength"
+        @changePage="onPaginate"
+        :count="count"
+        :cur="page"
+      />
+      <div>Total Sum = {{ getFPV }}</div>
     </v-col>
-    <v-col cols="6">
-      <div class="text-h5 text-md-3 pb-4">CHARTS</div>
+    <v-col cols="3">
+      CHARTS
+      <Chart> </Chart>
     </v-col>
   </v-row>
-</v-container>
-  
 </template>
+
 <script>
-import { mapActions, mapGetters, mapMutations } from "vuex";
+import { mapMutations, mapGetters, mapActions } from "vuex";
 import PaymentsDisplay from "../components/PaymentsDisplay.vue";
-import CategoryDisplay from "../components/CategoryDisplay.vue";
+import Pagination from "../components/Pagination.vue";
 import AddPaymentForm from "../components/AddPaymentForm.vue";
+import Chart from "@/components/Chart";
+//import Button from "../components/Button.vue";
 
 export default {
   name: "PageDashboard",
   components: {
     PaymentsDisplay,
-    CategoryDisplay,
-    AddPaymentForm
+    AddPaymentForm,
+    Pagination,
+    Chart,
   },
   data() {
     return {
-      pages: this.$store.getters.getPages,
-      pageName: String,
-      // modalVisible: false,
-      dialog:false,
+      page: 1,
+      count: 10,
+      pageName: "",
+      dialog: false,
     };
   },
-  
   methods: {
     ...mapMutations(["setPaymentsListData", "addDataToPaymentList"]),
     ...mapActions({
       fetchListData: "fetchData",
     }),
-    performSwitch(page) {
-      this.fetchListData(page);
-    },
-    showPaymentsForm() {
-      this.$modal.show("add", { header: "Add My Cost", compName: "add" });
-    },
     addNewPaymentData(value) {
       this.addDataToPaymentList(value);
     },
-    // Context Menu emitted events
-    deletePayment(paymentId) {
-      this.$store.commit("deleteDataFromPaymentList", paymentId);
+    onPaginate(p) {
+      this.page = p;
     },
-    editPayment(paymentId) {
-      console.log("Edit Payment ", paymentId);
-      this.$contextMenu.edit(paymentId);
-      this.$store.commit("deleteDataFromPaymentList", paymentId);
+    goToPage(page) {
+      this.$router.push({
+        name: page,
+        params: {
+          id: "123",
+        },
+      });
+    },
+    showPaymentsForm() {
+      this.$modal.show("add", {
+        header: "Add My Cost",
+        compName: "AddPaymentForm",
+        category: this.categoryList,
+      });
+    },
+    setPage() {
+      this.pageName = location.pathname.slice(1);
     },
   },
   computed: {
@@ -91,25 +98,36 @@ export default {
     getFPV() {
       return this.getFullPaymentValue;
     },
-    paymentsList() {
+    paymentList() {
       return this.$store.getters.getPaymentList;
+    },
+    paymentListLength() {
+      return this.$store.getters.getPaymentList.length;
     },
     categoryList() {
       return this.$store.getters.getCategoryList;
     },
-   },
-   mounted() {},
-   created() {
-     if (!this.fetchListData.length) {
+    curElements() {
+      const { count, page } = this;
+      return this.paymentList.slice(
+        count * (page - 1),
+        count * (page - 1) + count
+      );
+    },
+  },
+  created() {
+    // this.paymentsList = this.fetchData()
+    // this.$store.commit('setPaymentsListData', this.fetchData())
+    if (!this.fetchListData.length) {
       this.fetchListData();
-     }
-     this.$store.dispatch("fetchCategoryList");
+    }
+    this.$store.dispatch("fetchCategoryList");
+  },
+  mounted() {
+    this.page = Number(this.$route.params.page) || 1;
+    console.log(this.$route);
   },
 };
 </script>
 
-<style>
-button:hover {
-  transform: scale(1.05);
-}
-</style>
+<style scoped lang="scss"></style>

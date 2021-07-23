@@ -1,17 +1,17 @@
 <template>
   <v-app>
     <v-app-bar
-          app    
+      app
+      flat
     >
-      <v-btn to="/dashboard" plain :ripple='false'>Dashboard</v-btn>
-      <v-btn to="/about" plain :ripple='false'>About</v-btn>
+    <v-btn to="/dashboard" plain :ripple='false'>Dashboard</v-btn>
+    <v-btn to="/about" plain :ripple='false'>About</v-btn>
+
     </v-app-bar>
-            
-         
-       
+
     <v-main>
       <v-container>
-      <router-view/>
+        <router-view/>
       </v-container>
     </v-main>
   </v-app>
@@ -27,9 +27,3 @@ export default {
   }),
 };
 </script>
-<style >
-body {
-    padding: 0;
-    margin: 10px;
-}
-</style>
