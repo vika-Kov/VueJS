@@ -6,10 +6,21 @@
       <v-dialog v-model="dialog" width="500">
         <template v-slot:activator= "{on}">
           <v-btn color="teal lighten-1" v-on="on" dark @click="showPaymentsForm">ADD NEW COST<v-icon>mdi-plus</v-icon></v-btn>
-          <v-card>
-          <AddPaymentForm/>
-          </v-card>
         </template>
+          <v-card>
+          <AddPaymentForm
+          @addNewPayment="addNewPaymentData"
+          :category-list="categoryList"/>
+          <v-card-action>
+             <v-btn
+            color="primary"
+            text
+            @click="dialog = false"
+          >
+            Close
+          </v-btn>
+          </v-card-action>
+          </v-card>
       </v-dialog>
         <PaymentsDisplay
           :items="paymentsList"
@@ -23,7 +34,7 @@
         <CategoryDisplay :items="categoryList" />
     </v-col>
     <v-col cols="6">
-      CHARTS
+      <div class="text-h5 text-md-3 pb-4">CHARTS</div>
     </v-col>
   </v-row>
 </v-container>
@@ -46,7 +57,7 @@ export default {
     return {
       pages: this.$store.getters.getPages,
       pageName: String,
-      modalVisible: false,
+      // modalVisible: false,
       dialog:false,
     };
   },
@@ -61,6 +72,9 @@ export default {
     },
     showPaymentsForm() {
       this.$modal.show("add", { header: "Add My Cost", compName: "add" });
+    },
+    addNewPaymentData(value) {
+      this.addDataToPaymentList(value);
     },
     // Context Menu emitted events
     deletePayment(paymentId) {

@@ -1,32 +1,20 @@
 <template>
-  <div class="payment-form">
-    <div>
-      <input
-        class="add-payment-form_input"
-        placeholder="Amount"
-        type="number"
-        v-model.number="value"
-      />
-      <input
-        class="add-payment-form_input"
-        placeholder="Category"
-        type="text"
-        v-model.trim="category"
-      />
-      <select name="status" class="select-category" v-model="category">
-        <option v-for="(item, idx) in categoryList" :value="item" :key="idx">
-          {{ item }}
-        </option>
-      </select>
-      <input
-        class="add-payment-form_input"
-        placeholder="Date"
-        type="text"
-        v-model.trim="date"
-      />
-      <button class="add-payment-form_button" @click="onClick">ADD +</button>
+<v-card class="text-left pa-8">
+    <v-text-field v-model="date" label="Date" />
+<v-select
+          :items="categoryList"
+          v-model="category"
+          label="Category"
+        ></v-select>
+    <v-text-field v-model.number="value" label="Value" />
+    <v-card-actions>
+    <div class="buttons">
+    <v-btn color="teal lighten-1"  dark @click="onClick">ADD<v-icon>mdi-plus</v-icon></v-btn>
+    
     </div>
-  </div>
+    </v-card-actions>
+</v-card>
+
 </template>
 
 <script>
@@ -58,6 +46,9 @@ export default {
         value,
       };
       this.$emit("addNewPayment", data);
+    },
+    onCloseClick() {
+      this.$modal.hide();
     },
     loadParams(route) {
       this.category = route.params["category"];
@@ -120,5 +111,10 @@ button:hover {
   margin-bottom: 10px;
   height: 30px;
   width: 200px;
+}
+.buttons{
+
+  display:flex;
+  justify-content: space-between;
 }
 </style>
