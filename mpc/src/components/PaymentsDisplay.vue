@@ -1,5 +1,20 @@
 <template>
-  <div class="payments-list">
+<v-container>
+  <v-row>
+    <v-col cols="1">#</v-col> 
+    <v-col cols="4">Date</v-col>
+    <v-col cols="5">Category</v-col>
+    <v-col cols="2">Value</v-col>
+  </v-row>
+  <v-row v-for="(item, idx) in items" :key="idx">
+   <v-col cols="1">{{ idx + 1 }}</v-col>
+    <v-col cols="4">{{ item.date }}</v-col>
+    <v-col cols="5">{{ item.category }}</v-col>
+    <v-col cols="2">{{ item.value }}</v-col>
+  </v-row>
+</v-container>
+</template>
+  <!-- <div class="payments-list">
     <div class="list">
       <table>
         <tr class="item">
@@ -41,14 +56,15 @@
     </button>
   </div>
 </template>
+ -->
 
 <script>
 export default {
   name: "PaymentsDisplay",
-  components: { ContextMenu: () => import("@/components/ContextMenu") },
+  // components: { ContextMenu: () => import("@/components/ContextMenu") },
   data() {
     return {
-      showContextMenu: false,
+      // showContextMenu: false,
       settings: {},
       selectedPaymentId: null,
     };
@@ -58,13 +74,13 @@ export default {
     pages: { type: Array, default: () => [], required: true },
   },
   methods: {
-    openContextMenu(event) {
-      this.$contextMenu.show("contextMenu", {
-        idx: event.target.id,
-        evt: event,
-      });
-      this.selectedPaymentId = this.items[event.target.id].id;
-    },
+    // openContextMenu(event) {
+    //   this.$contextMenu.show("contextMenu", {
+    //     idx: event.target.id,
+    //     evt: event,
+    //   });
+    //   this.selectedPaymentId = this.items[event.target.id].id;
+    // },
     onShown(settings) {
       this.settings = settings.settings;
     },
@@ -74,23 +90,24 @@ export default {
     onClick(page) {
       this.$emit("switchPages", page);
     },
-    deletePayment() {
-      this.$emit("deletePayment", this.selectedPaymentId);
-      this.$contextMenu.hide();
-    },
+    // deletePayment() {
+    //   this.$emit("deletePayment", this.selectedPaymentId);
+    //   this.$contextMenu.hide();
+    // },
     editPayment() {
       this.$emit("editPayment", this.selectedPaymentId);
     },
   },
-  mounted() {
-    this.$contextMenu.EventBus.$on("show", this.onShown);
-    this.$contextMenu.EventBus.$on("hide", this.onHide);
-  },
+  // mounted() {
+  //   this.$contextMenu.EventBus.$on("show", this.onShown);
+  //   this.$contextMenu.EventBus.$on("hide", this.onHide);
+  // },
 };
 </script>
-<style>
+ <style>
+/*
 li {
-  list-style-type: none; /* Убираем маркеры */
+  list-style-type: none;
 }
 .list {
   max-width: 560px;
@@ -123,5 +140,6 @@ li {
 }
 button:hover {
   transform: scale(1.05);
-}
+} 
+*/
 </style>
