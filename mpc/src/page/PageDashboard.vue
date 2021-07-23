@@ -5,9 +5,9 @@
       <div class="text-h5 text-md-3 pb-4">My personal costs</div>
       <v-dialog v-model="dialog" width="500">
         <template v-slot:activator= "{on}">
-          <v-btn color="teal lighten-1" v-on="on" dark >ADD NEW COST<v-icon>mdi-plus</v-icon></v-btn>
+          <v-btn color="teal lighten-1" v-on="on" dark @click="showPaymentsForm">ADD NEW COST<v-icon>mdi-plus</v-icon></v-btn>
           <v-card>
-           <!-- <ModalWindow/>  -->
+          <AddPaymentForm/>
           </v-card>
         </template>
       </v-dialog>
@@ -33,23 +33,24 @@
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import PaymentsDisplay from "../components/PaymentsDisplay.vue";
 import CategoryDisplay from "../components/CategoryDisplay.vue";
-// import ModalWindow from "../components/ModalWindow.vue";
+import AddPaymentForm from "../components/AddPaymentForm.vue";
 
 export default {
   name: "PageDashboard",
   components: {
     PaymentsDisplay,
     CategoryDisplay,
-    // ModalWindow
+    AddPaymentForm
   },
   data() {
     return {
       pages: this.$store.getters.getPages,
       pageName: String,
-      // modalVisible: false,
+      modalVisible: false,
       dialog:false,
     };
   },
+  
   methods: {
     ...mapMutations(["setPaymentsListData", "addDataToPaymentList"]),
     ...mapActions({
