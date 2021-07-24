@@ -1,13 +1,17 @@
 <template>
-  <v-card class="text-left pa-8">
+  <v-form ref="form">
     <v-text-field v-model="date" label="Date" />
     <v-select
       :items="categoryList"
       v-model="category"
       label="Category"
+      required
     ></v-select>
-    <v-text-field v-model.number="value" label="Value" />
-  </v-card>
+    <v-text-field v-model.number="value" label="Value" required />
+    <v-btn class="mr-4" @click="submit"> submit </v-btn>
+    <v-btn class="mr-4" @click="clear" color="error"> clear </v-btn>
+    <v-btn class="mr-4" @click="close" color="warning"> close </v-btn>
+  </v-form>
 </template>
 
 <script>
@@ -19,10 +23,17 @@ export default {
       value: 0,
       category: "Food",
       date: "",
-      cats: ["Food", "Transport", "Housing", "Healthcare"],
     };
   },
   methods: {
+    clear() {
+      this.value = "";
+      this.category = "Food";
+      this.date = null;
+    },
+    close() {
+      this.$emit("closeDialog");
+    },
     getCurrentDate() {
       const today = new Date();
       const d = today.getDate();
@@ -30,7 +41,7 @@ export default {
       const y = today.getFullYear();
       return `${d}.${m}.${y}`;
     },
-    onClick() {
+    submit() {
       const { value, category } = this;
       const data = {
         date: this.date || this.getCurrentDate(),

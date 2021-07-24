@@ -13,18 +13,15 @@
         <v-card>
           <AddPaymentForm
             @addNewPayment="addNewPaymentData"
+            @closeDialog="closeDialog"
             :category-list="categoryList"
           />
-          <v-card-actions>
-            <v-spacer></v-spacer>
-
-            <v-btn color="primary" text @click="dialog = false">Close</v-btn>
-
-            <v-btn color="primary" text>Add</v-btn>
-          </v-card-actions>
         </v-card>
       </v-dialog>
-      <PaymentsDisplay :items="curElements" />
+      <PaymentsDisplay
+        :items="curElements"
+        @addNewPayment="addDataToPaymentList"
+      />
       <Pagination
         :length="paymentListLength"
         @changePage="onPaginate"
@@ -70,6 +67,9 @@ export default {
     ...mapActions({
       fetchListData: "fetchData",
     }),
+    closeDialog() {
+      this.dialog = false;
+    },
     addNewPaymentData(value) {
       this.addDataToPaymentList(value);
     },
@@ -82,13 +82,6 @@ export default {
         params: {
           id: "123",
         },
-      });
-    },
-    showPaymentsForm() {
-      this.$modal.show("add", {
-        header: "Add My Cost",
-        compName: "AddPaymentForm",
-        category: this.categoryList,
       });
     },
     setPage() {

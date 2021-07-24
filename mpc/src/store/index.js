@@ -62,31 +62,36 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         setTimeout(() => {
           const items = [];
+          let counterId = 1;
           for (let i = 1; i < 33; i++) {
             items.push({
               date: "01.07.2021",
               category: "Food",
               value: i,
-              id: i,
+              id: counterId,
             });
+            counterId += 1;
             items.push({
               date: "01.07.2021",
               category: "Education",
               value: i,
-              id: i,
+              id: counterId,
             });
+            counterId += 1;
             items.push({
               date: "01.07.2021",
               category: "Transport",
               value: i,
-              id: i,
+              id: counterId,
             });
+            counterId += 1;
             items.push({
               date: "01.07.2021",
               category: "Life",
               value: i,
-              id: i,
+              id: counterId,
             });
+            counterId += 1;
           }
           resolve(items);
         }, 2000);
