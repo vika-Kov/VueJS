@@ -6,22 +6,23 @@
       <v-dialog v-model="dialog">
         <template v-slot:activator="{ on }">
           <v-btn color="teal" v-on="on" dark
-            >ADD NEW COST <v-icon>mdi-plus</v-icon></v-btn
-          >
+            >ADD NEW COST
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
         </template>
         <v-card>
           <AddPaymentForm
             @addNewPayment="addNewPaymentData"
             :category-list="categoryList"
           />
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn color="primary" text @click="dialog = false">Close</v-btn>
+
+            <v-btn color="primary" text>Add</v-btn>
+          </v-card-actions>
         </v-card>
-        <v-card-action>
-          <v-spacer></v-spacer>
-
-          <v-btn color="white" text @click="dialog = false">Close</v-btn>
-
-          <v-btn color="white" text>Add</v-btn>
-        </v-card-action>
       </v-dialog>
       <PaymentsDisplay :items="curElements" />
       <Pagination
@@ -30,22 +31,27 @@
         :count="count"
         :cur="page"
       />
-      <div>Total Sum = {{ getFPV }}</div>
+      <div>
+        <logger :iter="iter" :option="getChartOption()"></logger>
+      </div>
+      <!--        <div>Total Sum = {{ getFPV }}</div>-->
+      <!--        <div>new option = {{ getOption }}</div>-->
     </v-col>
     <v-col cols="3">
       CHARTS
-      <Chart> </Chart>
+      <Chart :option="getChartOption()"></Chart>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import { mapMutations, mapGetters, mapActions } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import PaymentsDisplay from "../components/PaymentsDisplay.vue";
 import Pagination from "../components/Pagination.vue";
 import AddPaymentForm from "../components/AddPaymentForm.vue";
 import Chart from "@/components/Chart";
 //import Button from "../components/Button.vue";
+import Logger from "@/components/Logger";
 
 export default {
   name: "PageDashboard",
@@ -54,9 +60,11 @@ export default {
     AddPaymentForm,
     Pagination,
     Chart,
+    Logger,
   },
   data() {
     return {
+      iter: 0,
       page: 1,
       count: 10,
       pageName: "",
@@ -92,6 +100,83 @@ export default {
     setPage() {
       this.pageName = location.pathname.slice(1);
     },
+    getSeriesData() {
+      return this.categoryList.map((category) => {
+        const name = category;
+        const value =
+          this.paymentList.reduce((res, cur) => {
+            if (cur.category === category) {
+              return res + cur.value;
+            }
+          }, 0) || 0;
+
+        return { name, value };
+      });
+    },
+    getChartOption() {
+      let option = {
+        // данные диаграммы
+        title: {
+          text: "Расходы по категориям",
+          left: "center",
+        },
+        tooltip: {
+          trigger: "item",
+          formatter: "{a} <br/>{b} : {c} ({d}%)",
+        },
+        legend: {
+          orient: "vertical",
+          left: "left",
+          data: [
+            "Food",
+            "Transport",
+            "Education",
+            "Internet",
+            "GB",
+            "Life",
+            "Sport",
+          ],
+        },
+        series: [
+          {
+            name: "Категории",
+            type: "pie",
+            radius: "55%",
+            center: ["50%", "60%"],
+            data: [
+              { name: "Food", value: 100 },
+              { name: "Transport", value: 50 },
+              { name: "Education", value: 50 },
+              { name: "Internet", value: 50 },
+              { name: "GB", value: 50 },
+              { name: "Life", value: 50 },
+              { name: "Sport", value: 50 },
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+          },
+        ],
+      };
+      // this.iter += 1;
+      const legend = this.$store.getters.getCategoryList;
+      const seriesData = this.getSeriesData();
+      if (seriesData) {
+        option.series[0].data = seriesData;
+      } else {
+        console.log("Series Data is NOT OK");
+      }
+      if (legend) {
+        option.legend.data = legend;
+      } else {
+        console.log("Legend Data is NOT OK");
+      }
+      return option;
+    },
   },
   computed: {
     ...mapGetters(["getFullPaymentValue"]),
@@ -114,6 +199,9 @@ export default {
         count * (page - 1) + count
       );
     },
+    // getOption() {
+    //   return this.getChartOption();
+    // },
   },
   created() {
     // this.paymentsList = this.fetchData()
@@ -125,7 +213,8 @@ export default {
   },
   mounted() {
     this.page = Number(this.$route.params.page) || 1;
-    console.log(this.$route);
+
+    // console.log(this.$route);
   },
 };
 </script>

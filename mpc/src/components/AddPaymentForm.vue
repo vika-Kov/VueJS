@@ -6,7 +6,7 @@
       v-model="category"
       label="Category"
     ></v-select>
-    <v-text-field v-model.number="value" label="Date" />
+    <v-text-field v-model.number="value" label="Value" />
   </v-card>
 </template>
 
