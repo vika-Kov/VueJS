@@ -31,11 +31,8 @@
         :count="count"
         :cur="page"
       />
-      <div>
-        <logger :iter="iter" :option="getChartOption()"></logger>
-      </div>
-      <!--        <div>Total Sum = {{ getFPV }}</div>-->
-      <!--        <div>new option = {{ getOption }}</div>-->
+
+      <div>Total Sum = {{ getFPV }}</div>
     </v-col>
     <v-col cols="3">
       CHARTS
@@ -50,8 +47,6 @@ import PaymentsDisplay from "../components/PaymentsDisplay.vue";
 import Pagination from "../components/Pagination.vue";
 import AddPaymentForm from "../components/AddPaymentForm.vue";
 import Chart from "@/components/Chart";
-//import Button from "../components/Button.vue";
-import Logger from "@/components/Logger";
 
 export default {
   name: "PageDashboard",
@@ -60,7 +55,6 @@ export default {
     AddPaymentForm,
     Pagination,
     Chart,
-    Logger,
   },
   data() {
     return {
