@@ -12,7 +12,13 @@
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+            <v-btn
+              color="teal darken-2"
+              dark
+              class="mb-2"
+              v-bind="attrs"
+              v-on="on"
+            >
               Добавить новый расход
             </v-btn>
           </template>
@@ -50,8 +56,12 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
-              <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+              <v-btn color="teal darken-2" dark text @click="close">
+                Отменить
+              </v-btn>
+              <v-btn color="teal darken-2" dark text @click="save">
+                Сохранить
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -62,10 +72,10 @@
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete"
+              <v-btn color="teal darken-2" dark text @click="closeDelete"
                 >Отменить</v-btn
               >
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+              <v-btn color="teal darken-2" dark text @click="deleteItemConfirm"
                 >OK</v-btn
               >
               <v-spacer></v-spacer>
@@ -80,15 +90,11 @@
     </template>
     <template v-slot:item.category="{ item }">
       <v-context-menu
-        :editItem="item"
         :content="item.category"
         @onEdit="editItem(item)"
         @onDelete="deleteItem(item)"
       ></v-context-menu>
     </template>
-    <!--    <template v-slot:no-data>-->
-    <!--      <v-btn color="primary" @click="initialize"> Reset </v-btn>-->
-    <!--    </template>-->
   </v-data-table>
 </template>
 <script>
@@ -149,10 +155,7 @@ export default {
     },
 
     deleteItemConfirm() {
-      // this.desserts.splice(this.editedIndex, 1);
-      // Add delete functionality
       this.$store.commit("deleteDataFromPaymentList", this.editedIndex);
-      this.$emit("chartRerender");
       this.closeDelete();
     },
 
@@ -177,14 +180,11 @@ export default {
       this.editedItem.value = Number(this.editedItem.value);
 
       if (this.editedIndex > -1) {
-        // Object.assign(this.desserts[this.editedIndex], this.editedItem);
-
         this.$store.commit("editPayment", {
           editedItem: this.editedItem,
           editedIndex: this.editedIndex,
         });
       } else {
-        // this.desserts.push(this.editedItem);
         // вычисляем последний индекс и увеличиваем его на 1
         this.editedItem.id =
           this.items.reduce((acc, val) => {

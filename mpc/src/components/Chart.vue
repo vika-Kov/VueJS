@@ -36,5 +36,7 @@ export default {
 <style scoped>
 .chart {
   height: 400px;
+  width: 400px;
+  background-color: white;
 }
 </style>

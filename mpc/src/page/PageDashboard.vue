@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="9">
+    <v-col cols="6">
       <div class="text-h5 text-md-3 pb-4">Учёт расходов</div>
 
       <PaymentsDisplay
@@ -12,8 +12,9 @@
 
       <div>Total Sum = {{ getFPV }}</div>
     </v-col>
-    <v-col cols="3">
-      Диаграмма расходов
+    <v-col cols="6">
+      <div class="text-h5 text-md-3 pb-4">Диаграмма расходов</div>
+
       <v-chart :option="getChartOption()"></v-chart>
     </v-col>
   </v-row>
