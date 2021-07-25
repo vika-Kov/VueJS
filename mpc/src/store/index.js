@@ -23,6 +23,18 @@ export default new Vuex.Store({
     // editPaymentList(state, payload){
     //     Vue.set(state.paymentsList, 0, payload)
     // }
+    deleteDataFromPaymentList(state, payload) {
+      // state.paymentsList = state.paymentsList.filter(
+      //   (payment) => payment.id !== payload
+      // );
+      this.state.paymentsList.splice(payload, 1);
+    },
+    editPayment(state, payload) {
+      Object.assign(
+        this.state.paymentsList[payload.editedIndex],
+        payload.editedItem
+      );
+    },
   },
   getters: {
     getPaymentList: (state) => state.paymentsList,

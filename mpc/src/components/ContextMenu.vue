@@ -1,17 +1,22 @@
 <template>
   <div class="text-center">
-    <v-menu flat color="grey" offset-y>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn text color="gray" v-bind="attrs" v-on="on">
-          <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn>
+    <v-menu>
+      <template v-slot:activator="{ on: menu, attrs }">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on: tooltip }">
+            <v-btn v-bind="attrs" v-on="{ ...tooltip, ...menu }" text>
+              {{ content }}
+            </v-btn>
+          </template>
+          <span>ЛКМ - конекстное меню</span>
+        </v-tooltip>
       </template>
       <v-list>
         <v-list-item v-for="(item, index) in items" :key="index">
-          <v-list-item-title @click="action = item.action">
-            <v-icon>{{ item.icon }}</v-icon
-            >{{ item.title }}
-          </v-list-item-title>
+          <v-list-item-title @click="onClick(item.action)"
+            ><v-icon>{{ item.icon }}</v-icon
+            >{{ item.title }}</v-list-item-title
+          >
         </v-list-item>
       </v-list>
     </v-menu>
@@ -21,7 +26,7 @@
 <script>
 export default {
   name: "ContextMenu",
-  props: ["itemId"],
+  props: ["content"],
   data: () => ({
     items: [
       {
@@ -31,22 +36,11 @@ export default {
       },
       { title: "Удалить", icon: "mdi-delete", action: "delete" },
     ],
-    action: "",
   }),
   methods: {
-    onEdit() {
-      console.log("edit");
-      this.$emit("onEdit", this.itemId);
-    },
-    onDelete() {
-      console.log("delete");
-      this.$emit("onDelete", this.itemId);
-    },
-  },
-  watch: {
-    action: function (value) {
-      if (value === "edit") this.onEdit();
-      if (value === "delete") this.onDelete();
+    onClick(action) {
+      if (action === "edit") this.$emit("onEdit");
+      if (action === "delete") this.$emit("onDelete");
     },
   },
 };

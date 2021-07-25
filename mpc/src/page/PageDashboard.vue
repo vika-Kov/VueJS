@@ -1,39 +1,20 @@
 <template>
   <v-row>
     <v-col cols="9">
-      <div class="text-h5 text-md-3 pb-4">My personal costs</div>
+      <div class="text-h5 text-md-3 pb-4">Учёт расходов</div>
 
-      <v-dialog v-model="dialog">
-        <template v-slot:activator="{ on }">
-          <v-btn color="teal" v-on="on" dark
-            >ADD NEW COST
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </template>
-        <v-card>
-          <AddPaymentForm
-            @addNewPayment="addNewPaymentData"
-            @closeDialog="closeDialog"
-            :category-list="categoryList"
-          />
-        </v-card>
-      </v-dialog>
       <PaymentsDisplay
-        :items="curElements"
+        :headers="headers"
+        :items="paymentList"
+        :category-list="categoryList"
         @addNewPayment="addDataToPaymentList"
-      />
-      <Pagination
-        :length="paymentListLength"
-        @changePage="onPaginate"
-        :count="count"
-        :cur="page"
       />
 
       <div>Total Sum = {{ getFPV }}</div>
     </v-col>
     <v-col cols="3">
-      CHARTS
-      <Chart :option="getChartOption()"></Chart>
+      Диаграмма расходов
+      <v-chart :option="getChartOption()"></v-chart>
     </v-col>
   </v-row>
 </template>
@@ -41,25 +22,37 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import PaymentsDisplay from "../components/PaymentsDisplay.vue";
-import Pagination from "../components/Pagination.vue";
-import AddPaymentForm from "../components/AddPaymentForm.vue";
-import Chart from "@/components/Chart";
+// import AddPaymentForm from "../components/AddPaymentForm.vue";
+import ECharts from "@/components/Chart";
 
 export default {
   name: "PageDashboard",
   components: {
     PaymentsDisplay,
-    AddPaymentForm,
-    Pagination,
-    Chart,
+    "v-chart": ECharts,
   },
   data() {
     return {
-      iter: 0,
       page: 1,
       count: 10,
       pageName: "",
       dialog: false,
+      headers: [
+        {
+          text: "id",
+          align: "start",
+          sortable: false,
+          value: "id",
+        },
+        {
+          text: "Category",
+          sortable: true,
+          value: "category",
+        },
+        { text: "Date", value: "date" },
+        { text: "Value", value: "value" },
+        { text: "Actions", value: "actions", sortable: false },
+      ],
     };
   },
   methods: {
@@ -73,32 +66,20 @@ export default {
     addNewPaymentData(value) {
       this.addDataToPaymentList(value);
     },
-    onPaginate(p) {
-      this.page = p;
-    },
-    goToPage(page) {
-      this.$router.push({
-        name: page,
-        params: {
-          id: "123",
-        },
-      });
-    },
-    setPage() {
-      this.pageName = location.pathname.slice(1);
-    },
     getSeriesData() {
-      return this.categoryList.map((category) => {
-        const name = category;
-        const value =
-          this.paymentList.reduce((res, cur) => {
+      const series = this.categoryList.map((category) => {
+        return {
+          name: category,
+          value: this.paymentList.reduce((acc, cur) => {
             if (cur.category === category) {
-              return res + cur.value;
+              return acc + cur.value;
+            } else {
+              return acc;
             }
-          }, 0) || 0;
-
-        return { name, value };
+          }, 0),
+        };
       });
+      return series;
     },
     getChartOption() {
       let option = {
@@ -149,7 +130,6 @@ export default {
           },
         ],
       };
-      // this.iter += 1;
       const legend = this.$store.getters.getCategoryList;
       const seriesData = this.getSeriesData();
       if (seriesData) {
@@ -173,26 +153,12 @@ export default {
     paymentList() {
       return this.$store.getters.getPaymentList;
     },
-    paymentListLength() {
-      return this.$store.getters.getPaymentList.length;
-    },
+
     categoryList() {
       return this.$store.getters.getCategoryList;
     },
-    curElements() {
-      const { count, page } = this;
-      return this.paymentList.slice(
-        count * (page - 1),
-        count * (page - 1) + count
-      );
-    },
-    // getOption() {
-    //   return this.getChartOption();
-    // },
   },
   created() {
-    // this.paymentsList = this.fetchData()
-    // this.$store.commit('setPaymentsListData', this.fetchData())
     if (!this.fetchListData.length) {
       this.fetchListData();
     }
@@ -200,8 +166,6 @@ export default {
   },
   mounted() {
     this.page = Number(this.$route.params.page) || 1;
-
-    // console.log(this.$route);
   },
 };
 </script>
